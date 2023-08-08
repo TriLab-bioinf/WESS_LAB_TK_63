@@ -1,0 +1,7 @@
+.DS_Store
+.Rhistory
+.Rproj.user/
+TK_63.Rproj
+affy_gene_expression.txt
+data/
+gene2affy.xlsx

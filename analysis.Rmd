@@ -1,0 +1,161 @@
+---
+title: "TK_63: Expression of Gna12 and Gna13 genes in mouse pancreatic beta cells"
+author: "Hernan Lorenzi"
+affiliation: "The TriLab Bioinformatics Group, LBG-LCMB-LBC, NIDDK, NIH"
+date: "8/4/2023"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+    theme:
+      bootswatch: flatly
+---
+
+```{=html}
+<style type="text/css">
+
+h1.title {
+  font-size: 38px;
+  text-align: center;
+}
+h4.author {
+  font-size: 24px;
+  text-align: center;
+}
+h4.affiliation {
+  font-size: 24px;
+  text-align: center;
+}
+h4.date {
+  font-size: 24px;
+  text-align: center;
+}
+</style>
+```
+**PI:** Jurgen Wess\
+**Point of Contact:** Srinivas Pittala\
+**Contact email:**
+[Srinivas.Pittala\@nih.gov](mailto:Contact_name@nih.gov){.email}
+
+**Summary:** to find the murine G-proteins
+[*GNA12*](https://www.uniprot.org/uniprotkb/P27600/entry) and
+[*GNA13*](https://www.uniprot.org/uniprotkb/P27601/entry) expression levels in
+pancreatic beta cells.
+
+Candidate projects with expression info for G12/G13 proteins in pancreatic beta
+cells are
+[here](https://gcc02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.informatics.jax.org%2Fgxd%2Fhtexp_index%2Fsummary%3Fstructure%3Dpancreatic%2Bislet%26theilerStage%3D0%26_theilerStage%3D1%26age%3DANY%26_age%3D1%26mutatedIn%3D%26strain%3D%26sex%3D%26method%3D%26text%3D%26textScope%3DTitle%26textScope%3DDescription%26arrayExpressID%3D&data=05%7C01%7Chernan.lorenzi%40nih.gov%7Ce6ad33a500ca4594ac1208db9520044a%7C14b77578977342d58507251ca2dc2b06%7C0%7C0%7C638267736961442889%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=6PdBA9J0oLytLJ4xWeaUumRiHfvxNJm1cEvGjbXXXAQ%3D&reserved=0).
+From these studies the analysis was run on WT samples from the following two
+datasets:
+[GSE16048](https://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE16048)
+and [GSE29674](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE29674).
+
+For dataset
+[GSE16048](https://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE16048)
+islets were isolated and RNA prepared from 8-week-old (gender not specified).
+All the mice were bred on a mixed genetic background (SV 129/C57BL/6)
+
+For dataset
+[GSE29674](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE29674) islets
+were isolated and RNA prepared from five 5-week-old female mice (C57/129 genetic
+background).
+
+### R code
+
+```{r include=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning=FALSE, error=FALSE)
+```
+
+### Load libraries
+
+```{r}
+library(tidyverse)
+```
+
+### Load dataset GSE16048
+
+```{r}
+# Load ensemblid2affyid file
+ensembl2affy <- read_delim(file = "./data/ensemblid2affyid.txt", delim = "\t", col_names = c("EnsemblID", "Affy_MOE430A_ID", "Affy_MOE430B_ID"), skip = 1)
+
+# Only load WT samples
+# VALUES represent Log2 RMA normalized expression signal
+for (sample in c("GSM401525","GSM401526","GSM401527")){ 
+  assign(x = sample, value = read_delim(file = paste0("https://www.ebi.ac.uk/biostudies/files/E-GEOD-16048/",sample,"_sample_table.txt"), delim = "\t"))
+}
+
+# Merge datasets
+data.16048 <- tibble(Probe=GSM401525$ID_REF, GSM401525=GSM401525$VALUE, GSM401526=GSM401526$VALUE, GSM401527=GSM401527$VALUE)
+
+# Add column with median expression value per probe
+data.16048 <- data.16048 %>% 
+        rowwise() %>% 
+        mutate(median=median(c(GSM401525,GSM401526,GSM401527)))
+
+# Add column with mean expression value per probe
+data.16048 <- data.16048 %>% 
+        rowwise() %>% 
+        mutate(mean=mean(c(GSM401525,GSM401526,GSM401527)))
+
+data.16048_gene <- inner_join(x=data.16048, y=ensembl2affy, by=join_by(Probe == Affy_MOE430A_ID))
+```
+
+### Load dataset GSE29674
+
+```{r}
+# Only load WT samples
+# VALUES represent Log2 RMA normalized expression signal
+for (sample in c("GSM735944","GSM735945","GSM735946","GSM735947","GSM735948")){ 
+  assign(x = sample, value = read_delim(file = paste0("https://www.ebi.ac.uk/biostudies/files/E-GEOD-29674/",sample,"_sample_table.txt"), delim = "\t"))
+}
+
+# Merge datasets
+data.29674 <- tibble(Probe=GSM735944$ID_REF, 
+                     GSM735944=GSM735944$VALUE, 
+                     GSM735945=GSM735945$VALUE,
+                     GSM735946=GSM735946$VALUE,
+                     GSM735947=GSM735947$VALUE,
+                     GSM735948=GSM735948$VALUE,)
+
+# Add column with median expression value per probe
+data.29674 <- data.29674 %>% 
+        rowwise() %>% 
+        mutate(median=median(c(GSM735944,GSM735946,GSM735946,GSM735947,GSM735948)))
+
+# Add column with mean expression value per probe
+data.29674 <- data.29674 %>% 
+        rowwise() %>% 
+        mutate(mean=mean(c(GSM735944,GSM735946,GSM735946,GSM735947,GSM735948)))
+
+data.29674_gene <- inner_join(x=data.29674, y=ensembl2affy, by=join_by(Probe == Affy_MOE430A_ID))
+```
+
+### Summarize mean expression by gene (dataset GSE16048)
+
+```{r}
+mean_exp_per_gene.GSE16048 <- data.16048_gene %>% group_by(EnsemblID) %>% summarise(Mean_exp=mean(mean)) %>% arrange(desc(Mean_exp)) %>% mutate(Dataset="GSE16048") %>% mutate(Percent_rank=percent_rank(Mean_exp))
+
+gna12 <- 'ENSMUSG00000000149'
+gna13 <- 'ENSMUSG00000020611'
+
+# Print percent rank for gna12 and gna13
+print(filter(mean_exp_per_gene.GSE16048, EnsemblID  %in%  c(gna12, gna13)))
+```
+
+### Summarize mean expression by gene (dataset GSE29674)
+
+```{r}
+mean_exp_per_gene.GSE29674 <- data.29674_gene %>% group_by(EnsemblID) %>% summarise(Mean_exp=mean(mean)) %>% arrange(desc(Mean_exp)) %>% mutate(Dataset="GSE29674") %>% mutate(Percent_rank=percent_rank(Mean_exp))
+
+gna12 <- 'ENSMUSG00000000149'
+gna13 <- 'ENSMUSG00000020611'
+
+# Print percent rank for gna12 and gna13
+print(filter(mean_exp_per_gene.GSE29674, EnsemblID  %in%  c(gna12, gna13)))
+```
+
+### R session information
+
+```{r}
+sessionInfo()
+```
