@@ -154,6 +154,23 @@ gna13 <- 'ENSMUSG00000020611'
 print(filter(mean_exp_per_gene.GSE29674, EnsemblID  %in%  c(gna12, gna13)))
 ```
 
+### Results
+
+| **EnsemblID**      | **Gene name** | **Mean expression** | **Percentile rank** | **Study** |
+|----------------|:--------------:|:--------------:|:--------------:|:--------------:|
+| ENSMUSG00000020611 |     gna13     |      5.298699       |      0.4688176      | GSE29674  |
+| ENSMUSG00000000149 |     gna12     |      3.490793       |      0.3242475      | GSE29674  |
+| ENSMUSG00000020611 |     gna13     |      8.245162       |      0.6560356      | GSE16048  |
+| ENSMUSG00000000149 |     gna12     |      6.405584       |      0.4173311      | GSE16048  |
+
+: Pancreatic beta-cell gene expression[^1] and percentile rank[^2] of GNA12 and
+GNA13 genes across WT samples from studies GSE29674 and GSE16048.
+
+[^1]: Log2 RMA normalized expression signal
+
+[^2]: Percentage of expression values in its frequency distribution that are
+    less than a given gene expression value.
+
 ### R session information
 
 ```{r}

@@ -2017,6 +2017,60 @@ print(filter(mean_exp_per_gene.GSE29674, EnsemblID  %in%  c(gna12, gna13)))</cod
 ## 1 ENSMUSG00000020611     5.30 GSE29674        0.469
 ## 2 ENSMUSG00000000149     3.49 GSE29674        0.324</code></pre>
 </div>
+<div id="results" class="section level3">
+<h3>Results</h3>
+<table>
+<caption>Pancreatic beta-cell gene expression<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> and percentile rank<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> of GNA12
+and GNA13 genes across WT samples from studies GSE29674 and
+GSE16048.</caption>
+<colgroup>
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>EnsemblID</strong></th>
+<th align="center"><strong>Gene name</strong></th>
+<th align="center"><strong>Mean expression</strong></th>
+<th align="center"><strong>Percentile rank</strong></th>
+<th align="center"><strong>Study</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ENSMUSG00000020611</td>
+<td align="center">gna13</td>
+<td align="center">5.298699</td>
+<td align="center">0.4688176</td>
+<td align="center">GSE29674</td>
+</tr>
+<tr class="even">
+<td>ENSMUSG00000000149</td>
+<td align="center">gna12</td>
+<td align="center">3.490793</td>
+<td align="center">0.3242475</td>
+<td align="center">GSE29674</td>
+</tr>
+<tr class="odd">
+<td>ENSMUSG00000020611</td>
+<td align="center">gna13</td>
+<td align="center">8.245162</td>
+<td align="center">0.6560356</td>
+<td align="center">GSE16048</td>
+</tr>
+<tr class="even">
+<td>ENSMUSG00000000149</td>
+<td align="center">gna12</td>
+<td align="center">6.405584</td>
+<td align="center">0.4173311</td>
+<td align="center">GSE16048</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div id="r-session-information" class="section level3">
 <h3>R session information</h3>
 <pre class="r"><code>sessionInfo()</code></pre>
@@ -2052,6 +2106,14 @@ print(filter(mean_exp_per_gene.GSE29674, EnsemblID  %in%  c(gna12, gna13)))</cod
 ## [37] magrittr_2.0.3    scales_1.2.1      htmltools_0.5.5   colorspace_2.1-0 
 ## [41] utf8_1.2.3        stringi_1.7.12    munsell_0.5.0     cachem_1.0.8     
 ## [45] crayon_1.5.2</code></pre>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>Log2 RMA normalized expression signal<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Percentage of expression values in its frequency
+distribution that are less than a given gene expression value.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
 
 
